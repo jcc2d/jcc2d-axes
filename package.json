@@ -1,6 +1,6 @@
 {
   "name": "jcc2d.axes",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "a cartesian coordinate system for jcc2d",
   "main": "./build/jcc2d.axes.js",
   "module": "./build/jcc2d.axes.module.js",
