@@ -84,7 +84,7 @@
     var WORLD = new JC.Container();
     var ANI_DOC = new JC.Container();
     var coordTop = new JC.Graphics(new JC.Axes({ size: 200, jutting: 20 }));
-    var coordBottom = new JC.Graphics(new JC.Axes({ size: 200, jutting: 20, origin: new JC.Point(10, 14) }));
+    var coordBottom = new JC.Graphics(new JC.Axes({ size: 200, jutting: 20 }));
 
     var PolarAnis = [];
     var HeartCurve = [];
@@ -120,7 +120,7 @@
     resize();
 
     function playMovie() {
-      var time = 1000;
+      var time = 600;
       var offset = new JC.Point();
       offset.x = coordBottom.x - coordTop.x;
       offset.y = coordBottom.y - coordTop.y;
@@ -167,9 +167,21 @@
     function resize() {
       w = window.innerWidth;
       h = window.innerHeight;
-      coordTop.y = -120;
-      ANI_DOC.y = -120;
-      coordBottom.y = 120;
+      if (w > h) {
+        coordTop.x = -130;
+        ANI_DOC.x = -130;
+        coordBottom.x = 130;
+        coordTop.y = 0;
+        ANI_DOC.y = 0;
+        coordBottom.y = 0;
+      } else {
+        coordTop.x = 0;
+        ANI_DOC.x = 0;
+        coordBottom.x = 0;
+        coordTop.y = -130;
+        ANI_DOC.y = -130;
+        coordBottom.y = 130;
+      }
       WORLD.x = w / 2;
       WORLD.y = h / 2;
       stage.resize(w, h);
