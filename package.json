@@ -46,9 +46,11 @@
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
     "chalk": "^2.3.0",
+    "dat.gui": "^0.7.2",
     "eslint": "^4.12.1",
     "eslint-config-google": "^0.9.1",
     "http-server": "^0.10.0",
+    "jcc2d": "^1.6.3",
     "jsdoc": "^3.5.5",
     "karma": "^1.7.1",
     "karma-chai": "^0.1.0",
@@ -58,13 +60,17 @@
     "npmsrcify": "0.0.2",
     "rollup": "^0.52.0",
     "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-node-resolve": "^3.3.0",
     "standard-version": "^4.2.0",
+    "stats.js": "^0.17.0",
     "three": "^0.91.0",
     "validate-commit-msg": "^2.14.0"
   },
   "config": {
     "npmsrcify": {
       "modules": [
+        "dat.gui",
+        "stats.js",
         "jcc2d"
       ],
       "output": "./examples/libs"

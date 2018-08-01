@@ -1,62 +1,73 @@
+import { Point } from 'jcc2d';
+
 /**
  * 坐标系
  * @param {object} options 初始化配置
  */
-function Coordinate(options) {
+function Axes(options) {
   options = options || {};
-  this.segment = options.segment || 10;
+  this.segment = options.segment || 20;
   this.size = options.size || 400;
   this.jutting = options.jutting || 50;
+  this.gridWeight = options.gridWeight || 0.2;
+  this.axesWeight = options.axesWeight || 1;
+
+  var c = this.segment >> 1;
+  this.origin = options.origin || new Point(c, c);
   this.gridColor = options.gridColor || '#444a61';
   this.axisColor = options.axisColor || '#646794';
 }
 
-Coordinate.prototype.render = function (ctx) {
+Axes.prototype.render = function (ctx) {
   this._renderGrid(ctx);
-  this._renderAxis(ctx);
+  this._renderAxes(ctx);
 };
 
-Coordinate.prototype._renderAxis = function (ctx) {
+Axes.prototype._renderAxes = function (ctx) {
   var s = this.jutting;
   var l = this.size;
   var e = s + l;
   var ax = 6;
   var ay = 12;
+  var ox = l * this.origin.x / this.segment;
+  var oy = l * this.origin.y / this.segment;
 
   ctx.beginPath();
-  ctx.moveTo(0, s);
-  ctx.lineTo(0, -e);
-  ctx.moveTo(-ax, -e + ay);
-  ctx.lineTo(0, -e);
-  ctx.lineTo(ax, -e + ay);
+  ctx.moveTo(0, s + oy);
+  ctx.lineTo(0, -e + oy);
+  ctx.moveTo(-ax, -e + ay + oy);
+  ctx.lineTo(0, -e + oy);
+  ctx.lineTo(ax, -e + ay + oy);
 
-  ctx.moveTo(-s, 0);
-  ctx.lineTo(e, 0);
-  ctx.moveTo(e - ay, ax);
-  ctx.lineTo(e, 0);
-  ctx.lineTo(e - ay, -ax);
+  ctx.moveTo(-s - ox, 0);
+  ctx.lineTo(e - ox, 0);
+  ctx.moveTo(e - ay - ox, ax);
+  ctx.lineTo(e - ox, 0);
+  ctx.lineTo(e - ay - ox, -ax);
 
   ctx.strokeStyle = this.axisColor;
-  ctx.lineWidth = 4;
+  ctx.lineWidth = this.axesWeight;
   ctx.stroke();
 };
 
-Coordinate.prototype._renderGrid = function (ctx) {
+Axes.prototype._renderGrid = function (ctx) {
   var size = this.size;
   var seg = this.segment;
+  var ox = size * this.origin.x / this.segment;
+  var oy = size * this.origin.y / this.segment;
 
   ctx.beginPath();
-  ctx.lineWidth = 1;
-  for (var i = 1; i <= this.segment; i++) {
+  ctx.lineWidth = this.gridWeight;
+  for (var i = 0; i <= this.segment; i++) {
     var step = i * size / seg;
-    ctx.moveTo(step, 0);
-    ctx.lineTo(step, -size);
-    ctx.moveTo(0, -step);
-    ctx.lineTo(size, -step);
+    ctx.moveTo(step - ox, 0 + oy);
+    ctx.lineTo(step - ox, -size + oy);
+    ctx.moveTo(0 - ox, -step + oy);
+    ctx.lineTo(size - ox, -step + oy);
   }
   ctx.strokeStyle = this.gridColor;
   ctx.stroke();
 };
 
-export { Coordinate };
+export { Axes };
 //# sourceMappingURL=jcc2d.axes.module.js.map

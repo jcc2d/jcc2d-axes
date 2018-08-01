@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+  <title>JC_demo</title>
+  <link href="https://fonts.googleapis.com/css?family=Plaster" rel="stylesheet">
+  <style type="text/css">
+
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Plaster', cursive;
+      overflow: hidden;
+      background-color: transparent;
+    }
+
+  </style>
+</head>
+
+<body>
+  <canvas id="demo_canvas"></canvas>
+
+  <script type="text/javascript" src="../libs/jcc2d/build/jcc2d.js"></script>
+  <script type="text/javascript" src="../libs/stats.js/build/stats.min.js"></script>
+  <script type="text/javascript" src="../../build/jcc2d.axes.js"></script>
+  <script type="text/javascript">
+    var stage = new JC.Stage({
+      dom: 'demo_canvas'
+    });
+    var DOC = new JC.Container();
+    var coordLeft = new JC.Graphics(new JC.Axes({ size: 200, jutting: 20 }));
+    var coordRight = new JC.Graphics(new JC.Axes({ size: 200, jutting: 20 }));
+    DOC.adds(coordLeft, coordRight);
+    stage.adds(DOC);
+    stage.startEngine();
+    resize();
+
+    /**
+     * 帧率监控工具
+     */
+    var stats = new Stats();
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.top = '0px';
+    stats.domElement.style.display = 'none';
+    document.body.appendChild(stats.domElement);
+    stage.on('postrender', function () {
+      stats.update();
+    })
+
+    window.onresize = function () {
+      resize();
+    };
+    function resize() {
+      w = window.innerWidth;
+      h = window.innerHeight;
+      coordRight.y = -120;
+      coordLeft.y = 120;
+      DOC.x = w / 2;
+      DOC.y = h / 2;
+      stage.resize(w, h);
+    }
+
+  </script>
+</body>
+
+</html>

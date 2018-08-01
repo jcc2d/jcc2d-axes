@@ -1,0 +1,122 @@
+{
+  "_from": "jcc2d",
+  "_id": "jcc2d@1.6.3",
+  "_inBundle": false,
+  "_integrity": "sha512-ke2DzE2qqabS6/1KGt1UYS4Jd5UnPoHSCBBD1CCGMubblLfRiArl0yHFRUd+PzR2kFZtO3fkGtcONgY7SzQSBQ==",
+  "_location": "/jcc2d",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "jcc2d",
+    "name": "jcc2d",
+    "escapedName": "jcc2d",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/jcc2d/-/jcc2d-1.6.3.tgz",
+  "_shasum": "1f179902bef20b1a015f2feb2405e03624dbf992",
+  "_spec": "jcc2d",
+  "_where": "/Users/jason82/Documents/webfrontend/github/my-repo/jcc2d-axes",
+  "author": {
+    "name": "jason Chen",
+    "email": "jasonchen1882@gmail.com",
+    "url": "http://jason82.com"
+  },
+  "bugs": {
+    "url": "https://github.com/jasonChen1982/jcc2d/issues"
+  },
+  "bundleDependencies": false,
+  "config": {
+    "validate-commit-msg": {
+      "types": [
+        "feat",
+        "fix",
+        "docs",
+        "style",
+        "refactor",
+        "perf",
+        "test",
+        "chore",
+        "release",
+        "build",
+        "revert",
+        "deps"
+      ]
+    }
+  },
+  "deprecated": false,
+  "description": "a light weight canvas 2d render & an awesome animator",
+  "devDependencies": {
+    "@pixi/jsdoc-template": "^2.2.0",
+    "babel-core": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
+    "chai": "^4.1.2",
+    "chalk": "^2.3.0",
+    "eslint": "^4.11.0",
+    "eslint-config-google": "^0.9.1",
+    "http-server": "^0.10.0",
+    "jsdoc": "^3.5.5",
+    "karma": "^1.7.1",
+    "karma-chai": "^0.1.0",
+    "karma-mocha": "^1.3.0",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "mocha": "^4.0.1",
+    "rollup": "0.43.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-watch": "^4.3.1",
+    "standard-version": "^4.2.0",
+    "uglify-js": "^3.1.10",
+    "validate-commit-msg": "^2.14.0",
+    "yargs": "^7.1.0"
+  },
+  "directories": {
+    "example": "examples"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "build",
+    "esm",
+    "src"
+  ],
+  "homepage": "https://github.com/jasonChen1982/jcc2d#readme",
+  "keywords": [
+    "canvas",
+    "canvas 2d",
+    "renderer",
+    "browser",
+    "animation",
+    "canvas engine",
+    "javascript"
+  ],
+  "license": "MIT",
+  "main": "build/jcc2d.min.js",
+  "module": "esm/jcc2d.js",
+  "name": "jcc2d",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jasonChen1982/jcc2d.git"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "commitmsg": "validate-commit-msg",
+    "docs": "jsdoc -c scripts/jsdoc.conf.json -R README.md",
+    "fix": "eslint --fix ./src",
+    "http": "hs -o",
+    "lint": "eslint .",
+    "postver": "git push --follow-tags origin master && npm publish",
+    "precommit": "npm run lint",
+    "prever": "npm run build && git add -A && git commit -m 'release: release new version'",
+    "test": "karma start",
+    "ver": "standard-version -m 'chore(release): v%s'",
+    "watch": "node scripts/build.js --watch"
+  },
+  "version": "1.6.3"
+}
