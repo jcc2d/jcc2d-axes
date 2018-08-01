@@ -13,13 +13,13 @@ function Axes(options) {
   this.segment = options.segment || 20;
   this.size = options.size || 400;
   this.jutting = options.jutting || 50;
-  this.gridWeight = options.gridWeight || 0.2;
+  this.gridWeight = options.gridWeight || 0.1;
   this.axesWeight = options.axesWeight || 1;
 
   var c = this.segment >> 1;
   this.origin = options.origin || new jcc2d.Point(c, c);
-  this.gridColor = options.gridColor || '#444a61';
-  this.axisColor = options.axisColor || '#646794';
+  this.gridColor = options.gridColor || '#4f3993';
+  this.axisColor = options.axisColor || '#7850e3';
 }
 
 Axes.prototype.render = function (ctx) {

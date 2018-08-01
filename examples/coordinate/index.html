@@ -14,10 +14,19 @@
       margin: 0;
     }
 
+    html {
+      height: 100%;
+    }
+
     body {
+      height: 100%;
       font-family: 'Plaster', cursive;
       overflow: hidden;
-      background-color: transparent;
+      background: #10151b;
+    }
+
+    #demo_canvas {
+      width: 100%;
     }
 
   </style>
@@ -30,16 +39,115 @@
   <script type="text/javascript" src="../libs/stats.js/build/stats.min.js"></script>
   <script type="text/javascript" src="../../build/jcc2d.axes.js"></script>
   <script type="text/javascript">
+    function PolarLine(options) {
+      this.radius = options.radius || 0;
+      this.strokeColor = options.strokeColor || '#00d2ff';
+      this.fillColor = options.fillColor || '#ea2e88'; // #ff7593' : '#bd59ff
+      this.width = options.width || 1;
+      this.gradStart = Object.assign({ x: 0, y: 0, color: '#02d0fd' }, options.gradStart || {});
+      this.gradEnd = Object.assign({ x: 0, y: -50, color: '#ca398e' }, options.gradEnd || {});
+    }
+    PolarLine.prototype.initGrad = function(ctx) {
+      this.gradient = ctx.createLinearGradient(
+        this.gradStart.x,
+        this.gradStart.y,
+        this.gradEnd.x,
+        this.gradEnd.y
+      );
+      this.gradient.addColorStop(0, this.gradStart.color);
+      this.gradient.addColorStop(1, this.gradEnd.color);
+    };
+    PolarLine.prototype.render = function(ctx) {
+      if (!this.gradient) this.initGrad(ctx);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, -this.radius);
+      ctx.strokeStyle = this.gradient || this.strokeColor;
+      ctx.lineWidth = this.width;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(0, -this.radius, 2, 0, Math.PI * 2);
+      ctx.fillStyle = this.gradient || this.fillColor;
+      ctx.fill();
+    }
+
+    function heart(t) {
+      return (13 * t - 22 * t * t + 10 * t * t * t) / (6 - 5 * t);
+    }
+  </script>
+  <script type="text/javascript">
     var stage = new JC.Stage({
-      dom: 'demo_canvas'
+      dom: 'demo_canvas',
+      resolution: 2,
     });
-    var DOC = new JC.Container();
-    var coordLeft = new JC.Graphics(new JC.Axes({ size: 200, jutting: 20 }));
-    var coordRight = new JC.Graphics(new JC.Axes({ size: 200, jutting: 20 }));
-    DOC.adds(coordLeft, coordRight);
-    stage.adds(DOC);
+    var WORLD = new JC.Container();
+    var ANI_DOC = new JC.Container();
+    var coordTop = new JC.Graphics(new JC.Axes({ size: 200, jutting: 20 }));
+    var coordBottom = new JC.Graphics(new JC.Axes({ size: 200, jutting: 20, origin: new JC.Point(10, 14) }));
+
+    var PolarAnis = [];
+    var HeartCurve = [];
+    var steps = 20;
+    for (var i = 0; i <= steps; i++) {
+      var radius = 100 * heart(i / steps);
+      var point = new JC.Point(100 * i / steps, -radius);
+      var stepLine = new JC.Graphics(new PolarLine({ radius: radius, gradEnd: { y: -radius } }));
+      stepLine.x = point.x;
+      HeartCurve.push(point);
+      PolarAnis.push(stepLine);
+      ANI_DOC.adds(stepLine);
+    }
+    var catmullRomPath = new JC.CatmullRom(HeartCurve);
+    var heartPath = new JC.Graphics(function (ctx) {
+      ctx.beginPath();
+      ctx.strokeStyle = '#ca398e';
+      for (var i = 0; i < 100; i++) {
+        var pos = catmullRomPath.getPoint(i / 99);
+        if (i === 0) {
+          ctx.moveTo(pos.x, pos.y);
+        } else {
+          ctx.lineTo(pos.x, pos.y);
+        }
+      }
+      ctx.stroke();
+    });
+    ANI_DOC.adds(heartPath);
+
+    WORLD.adds(coordTop, coordBottom, ANI_DOC);
+    stage.adds(WORLD);
     stage.startEngine();
     resize();
+
+    function playMovie() {
+      var time = 1000;
+      var offset = new JC.Point();
+      offset.x = coordBottom.x - coordTop.x;
+      offset.y = coordBottom.y - coordTop.y;
+      for (var i = 0, l = PolarAnis.length; i < l; i++) {
+        var line = PolarAnis[i];
+        var onComplete;
+        if (i === l - 1) onComplete = delayLoop;
+        line.animate({
+          to: { x: offset.x, y: offset.y, rotation: 180 * i / (l - 1) },
+          duration: time,
+          wait: i * time,
+          onComplete: onComplete,
+        });
+      }
+    }
+    function delayLoop() {
+      PolarAnis.forEach(function(item, idx) {
+        item.animate({
+          to: { x: HeartCurve[idx].x, y: 0, rotation: 0 },
+          delay: idx * 100,
+        });
+      });
+      setTimeout(function() {
+        playMovie();
+      }, 3000)
+    }
+    playMovie();
 
     /**
      * 帧率监控工具
@@ -59,10 +167,11 @@
     function resize() {
       w = window.innerWidth;
       h = window.innerHeight;
-      coordRight.y = -120;
-      coordLeft.y = 120;
-      DOC.x = w / 2;
-      DOC.y = h / 2;
+      coordTop.y = -120;
+      ANI_DOC.y = -120;
+      coordBottom.y = 120;
+      WORLD.x = w / 2;
+      WORLD.y = h / 2;
       stage.resize(w, h);
     }
 
