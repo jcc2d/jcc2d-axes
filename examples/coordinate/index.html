@@ -5,10 +5,9 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta http-equiv="Cache-Control" content="no-cache">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
-  <title>JC_demo</title>
+  <title>heart curve animation by jcc2d</title>
   <link href="https://fonts.googleapis.com/css?family=Plaster" rel="stylesheet">
   <style type="text/css">
-
     * {
       padding: 0;
       margin: 0;
@@ -29,7 +28,6 @@
     #demo_canvas {
       width: 100%;
     }
-
   </style>
 </head>
 
@@ -42,11 +40,9 @@
   <script type="text/javascript">
     function PolarLine(options) {
       this.radius = options.radius || 0;
-      this.strokeColor = options.strokeColor || '#00d2ff';
-      this.fillColor = options.fillColor || '#ea2e88'; // #ff7593' : '#bd59ff
       this.width = options.width || 1;
       this.gradStart = Object.assign({ x: 0, y: 0, color: '#02d0fd' }, options.gradStart || {});
-      this.gradEnd = Object.assign({ x: 0, y: -50, color: '#ca398e' }, options.gradEnd || {});
+      this.gradEnd = Object.assign({ x: 0, y: -this.radius, color: '#ca398e' }, options.gradEnd || {});
     }
     PolarLine.prototype.initGrad = function(ctx) {
       this.gradient = ctx.createLinearGradient(
@@ -63,13 +59,13 @@
       ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.lineTo(0, -this.radius);
-      ctx.strokeStyle = this.gradient || this.strokeColor;
+      ctx.strokeStyle = this.gradient;
       ctx.lineWidth = this.width;
       ctx.stroke();
 
       ctx.beginPath();
       ctx.arc(0, -this.radius, 2, 0, Math.PI * 2);
-      ctx.fillStyle = this.gradient || this.fillColor;
+      ctx.fillStyle = this.gradient;
       ctx.fill();
     }
 
@@ -93,7 +89,7 @@
     for (var i = 0; i <= steps; i++) {
       var radius = 100 * heart(i / steps);
       var point = new JC.Point(100 * i / steps, -radius);
-      var stepLine = new JC.Graphics(new PolarLine({ radius: radius, gradEnd: { y: -radius } }));
+      var stepLine = new JC.Graphics(new PolarLine({ radius: radius }));
       stepLine.x = point.x;
       HeartCurve.push(point);
       PolarAnis.push(stepLine);
@@ -118,8 +114,8 @@
     var color = stage.ctx.createLinearGradient(-100, 0, 100, 0);
     color.addColorStop(0,"#ff6ab3");
     color.addColorStop(1,"#27feff");
-    var text = new JC.TextFace('Power By jcc2d', {
-      fontSize: '30px',
+    var text = new JC.TextFace('Power By "jcc2d"', {
+      fontSize: '24px',
       fontWeight: 'bold',
       fontFamily: 'Plaster',
       fillColor: color,
