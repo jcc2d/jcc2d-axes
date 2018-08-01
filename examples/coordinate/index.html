@@ -19,6 +19,7 @@
     }
 
     body {
+      position: relative;
       height: 100%;
       font-family: 'Plaster', cursive;
       overflow: hidden;
@@ -114,7 +115,22 @@
     });
     ANI_DOC.adds(heartPath);
 
-    WORLD.adds(coordTop, coordBottom, ANI_DOC);
+    var color = stage.ctx.createLinearGradient(-100, 0, 100, 0);
+    color.addColorStop(0,"#ff6ab3");
+    color.addColorStop(1,"#27feff");
+    var text = new JC.TextFace('Power By jcc2d', {
+      fontSize: '30px',
+      fontWeight: 'bold',
+      fontFamily: 'Plaster',
+      fillColor: color,
+    });
+    text.setArea(new JC.Rectangle(-180, -20, 360, 40));
+    text.cursor = 'pointer';
+    text.on('click', function () {
+      window.location.href = 'https://github.com/jasonChen1982/jcc2d';
+    });
+
+    WORLD.adds(coordTop, coordBottom, ANI_DOC, text);
     stage.adds(WORLD);
     stage.startEngine();
     resize();
@@ -184,6 +200,7 @@
       }
       WORLD.x = w / 2;
       WORLD.y = h / 2;
+      text.y = h / 2 - 70;
       stage.resize(w, h);
     }
 
